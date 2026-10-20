@@ -313,9 +313,7 @@
             <h2>Add New Item</h2>
 
             @if (session('success'))
-                <div class="success">
-                    {{ session('success') }}
-                </div>
+                <div class="success">{{ session('success') }}</div>
             @endif
 
             @if ($errors->any())
@@ -412,6 +410,7 @@
                             <th>SKU</th>
                             <th>Quantity</th>
                             <th>Unit Price</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -424,10 +423,13 @@
                                 <td>
                                     {{ number_format($item->unit_price, 2) }}
                                 </td>
+                                <td>
+                                    <a href="{{ route('items.edit', $item) }}">Edit</a>
+                                </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="empty">
+                                <td colspan="6" class="empty">
                                     No items added yet.
                                 </td>
                             </tr>

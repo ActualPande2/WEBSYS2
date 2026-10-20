@@ -34,4 +34,31 @@ class GameReviewController extends Controller
         
         return redirect()->route('reviews.index');
     }
+
+    public function edit(GameReview $gameReview): View
+    {
+        return view('game-reviews.edit', [
+            'gameReview' => $gameReview,
+        ]);
+    }
+
+    public function update(Request $request, GameReview $gameReview): RedirectResponse
+    {
+        $validated = $request->validate([
+            'game_title' => ['required', 'string', 'max:255'],
+            'review' => ['required', 'string', 'max:1000'],
+            'rating' => ['required', 'integer', 'min:1', 'max:5'],
+        ]);
+
+        $gameReview->update($validated);
+
+        return redirect()->route('reviews.index');
+    }
+
+    public function destroy(GameReview $gameReview): RedirectResponse
+    {
+        $gameReview->delete();
+
+        return redirect()->route('reviews.index');
+    }
 }

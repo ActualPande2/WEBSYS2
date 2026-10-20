@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\item;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class itemController extends Controller
 {
@@ -18,7 +19,7 @@ class itemController extends Controller
     {
         $validated = $request->validate([
             'item_name' => ['required', 'string', 'max:255'],
-            'sku' => ['required', 'string', 'max:255', 'unique:items,sku'],
+            'sku' => ['required', 'string', 'max:50', 'unique:items,sku'],
             'quantity' => ['required', 'integer', 'min:0'],
             'unit_price' => ['required', 'numeric', 'min:0'],
         ]);
@@ -26,5 +27,31 @@ class itemController extends Controller
         item::create($validated);
 
         return redirect()->route('items.index')->with('success', 'Item created successfully.');
+    }
+
+    public function edit(item $item)
+    {
+        return view('items.edit', compact('item'));
+    }
+
+    public function update(Request $request, item $item)
+    {
+        $validated = $request->validate([
+            'item_name' => ['required', 'string', 'max:255'],
+            'sku' => ['required', 'string', 'max:50', Rule::unique('items', 'sku')->ignore($item->id)],
+            'quantity' => ['required', 'integer', 'min:0'],
+            'unit_price' => ['required', 'numeric', 'min:0'],
+        ]);
+
+        $item->update($validated);
+
+        return redirect()->route('items.index')->with('success', 'Item updated successfully.');
+    }
+
+    public function destroy(item $item)
+    {
+        $item->delete();
+
+        return redirect()->route('items.index');
     }
 }
