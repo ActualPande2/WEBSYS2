@@ -1,0 +1,884 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+:root {
+    color-scheme: dark;
+    --stage-black: #090608;
+    --stage-shadow: #12090d;
+    --velvet-dark: #2a0c14;
+    --velvet: #571522;
+    --velvet-light: #842637;
+    --brass: #c99755;
+    --brass-light: #f0d09b;
+    --ivory: #f5ead8;
+    --muted: #c0ada5;
+}
+
+html {
+    min-height: 100%;
+    background: var(--stage-black);
+    scroll-behavior: smooth;
+}
+
+body.theatre-body {
+    min-height: 100vh;
+    margin: 0;
+    color: var(--ivory);
+    background:
+        radial-gradient(ellipse 60% 32% at 50% 0%, rgb(129 28 47 / 25%), transparent 75%),
+        radial-gradient(ellipse 75% 36% at 50% 100%, rgb(111 32 38 / 12%), transparent 78%),
+        linear-gradient(180deg, #11080c 0%, #0a0709 52%, #10090b 100%);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+}
+
+body.theatre-body::before {
+    position: fixed;
+    z-index: 0;
+    pointer-events: none;
+    content: '';
+    inset: 0;
+    opacity: 0.18;
+    background: repeating-linear-gradient(90deg, transparent 0 119px, rgb(240 208 155 / 4%) 120px, transparent 121px);
+}
+
+.theatre-shell {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.theatre-skip {
+    position: absolute;
+    z-index: 50;
+    top: 0.75rem;
+    left: 0.75rem;
+    transform: translateY(-180%);
+    border: 1px solid var(--brass-light);
+    border-radius: 0.35rem;
+    padding: 0.65rem 0.9rem;
+    color: var(--stage-black);
+    background: var(--brass-light);
+}
+
+.theatre-skip:focus {
+    transform: translateY(0);
+}
+
+.theatre-header {
+    position: relative;
+    z-index: 5;
+    border-bottom: 1px solid rgb(201 151 85 / 45%);
+    background: linear-gradient(180deg, rgb(38 10 17 / 98%), rgb(17 8 12 / 96%));
+    box-shadow: 0 9px 30px rgb(0 0 0 / 42%);
+}
+
+.theatre-header::before {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 2px;
+    content: '';
+    background: linear-gradient(90deg, transparent, var(--brass), var(--brass-light), var(--brass), transparent);
+}
+
+.theatre-header__inner,
+.theatre-footer__inner {
+    display: flex;
+    width: min(100% - 3rem, 1380px);
+    margin-inline: auto;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+}
+
+.theatre-header__inner {
+    min-height: 82px;
+    flex-wrap: wrap;
+    padding-block: 0.85rem;
+}
+
+.theatre-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    color: var(--brass-light);
+    text-decoration: none;
+}
+
+.theatre-brand__seal {
+    display: grid;
+    width: 42px;
+    height: 42px;
+    place-items: center;
+    border: 1px solid var(--brass);
+    border-radius: 50%;
+    color: var(--brass-light);
+    background: radial-gradient(circle, #742234, #210a11 70%);
+    box-shadow: 0 0 17px rgb(201 151 85 / 16%), inset 0 0 0 3px rgb(201 151 85 / 12%);
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+}
+
+.theatre-brand__title {
+    display: block;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.035em;
+}
+
+.theatre-brand__subtitle {
+    display: block;
+    margin-top: 0.15rem;
+    color: #b99b87;
+    font-size: 0.62rem;
+    letter-spacing: 0.19em;
+    text-transform: uppercase;
+}
+
+.theatre-navigation {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.3rem 1.25rem;
+}
+
+.theatre-nav-link {
+    border-bottom: 1px solid transparent;
+    padding: 0.5rem 0.05rem;
+    color: #d6c6b8;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 160ms ease, border-color 160ms ease;
+}
+
+.theatre-nav-link:hover,
+.theatre-nav-link.is-active {
+    border-color: var(--brass);
+    color: var(--brass-light);
+}
+
+.theatre-action {
+    display: inline-flex;
+    min-height: 42px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--brass-light);
+    border-radius: 0.32rem;
+    padding: 0.65rem 1rem;
+    color: #1a0d0c;
+    background: linear-gradient(135deg, #f0d09b, #c99755);
+    box-shadow: 0 5px 16px rgb(0 0 0 / 25%);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: filter 160ms ease, transform 160ms ease;
+}
+
+.theatre-action:hover {
+    filter: brightness(1.08);
+    transform: translateY(-1px);
+}
+
+.theatre-action--ghost {
+    border-color: rgb(240 208 155 / 55%);
+    color: var(--brass-light);
+    background: rgb(19 9 13 / 68%);
+    box-shadow: none;
+}
+
+.theatre-user {
+    color: #d6c6b8;
+    font-size: 0.78rem;
+}
+
+.theatre-logout-form {
+    display: inline;
+}
+
+.theatre-button-link {
+    border: 0;
+    border-bottom: 1px solid rgb(201 151 85 / 45%);
+    padding: 0.45rem 0.1rem;
+    color: #d6c6b8;
+    background: transparent;
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.theatre-button-link:hover {
+    color: var(--brass-light);
+}
+
+.theatre-main {
+    position: relative;
+    width: min(100% - 3rem, 1380px);
+    margin-inline: auto;
+    flex: 1;
+    padding-block: clamp(2.25rem, 5vw, 4.5rem) 5rem;
+}
+
+.theatre-alert {
+    margin-bottom: 1.5rem;
+    border: 1px solid rgb(201 151 85 / 58%);
+    border-left: 4px solid var(--brass);
+    border-radius: 0.4rem;
+    padding: 0.9rem 1.1rem;
+    color: var(--brass-light);
+    background: linear-gradient(90deg, rgb(82 20 35 / 75%), rgb(24 11 15 / 90%));
+}
+
+.theatre-footer {
+    position: relative;
+    border-top: 1px solid rgb(201 151 85 / 36%);
+    background: linear-gradient(180deg, rgb(24 9 14 / 84%), rgb(10 7 8 / 98%));
+}
+
+.theatre-footer__inner {
+    min-height: 74px;
+    flex-wrap: wrap;
+    padding-block: 1.2rem;
+    color: #a99388;
+    font-size: 0.77rem;
+}
+
+.theatre-footer__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 1.5rem;
+}
+
+.theatre-footer a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.theatre-footer a:hover {
+    color: var(--brass-light);
+}
+
+.theatre-marquee {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    min-height: 300px;
+    align-items: center;
+    overflow: hidden;
+    border: 1px solid var(--brass);
+    border-radius: 0.55rem;
+    padding: 2.8rem clamp(2rem, 6vw, 5rem);
+    background:
+        radial-gradient(ellipse at 50% 14%, rgb(255 228 184 / 21%), transparent 35%),
+        linear-gradient(90deg, #16080d 0%, #651725 5%, #351019 15%, #11090d 31%, #0d080b 69%, #351019 85%, #651725 95%, #16080d 100%);
+    box-shadow: 0 24px 60px rgb(0 0 0 / 45%), inset 0 0 0 5px rgb(201 151 85 / 11%), inset 0 0 75px #050304;
+}
+
+.theatre-marquee::before {
+    position: absolute;
+    z-index: 0;
+    content: '';
+    inset: 0;
+    opacity: 0.7;
+    background:
+        linear-gradient(180deg, rgb(137 31 48 / 68%), transparent 20%),
+        linear-gradient(90deg, rgb(11 5 8 / 30%), transparent 32%, transparent 68%, rgb(11 5 8 / 30%)),
+        repeating-linear-gradient(92deg, transparent 0 32px, rgb(17 5 10 / 17%) 34px 38px, transparent 41px 73px);
+    clip-path: polygon(0 0, 100% 0, 100% 89%, 86% 80%, 72% 91%, 58% 82%, 43% 91%, 28% 82%, 14% 91%, 0 82%);
+}
+
+.theatre-marquee::after {
+    position: absolute;
+    z-index: 0;
+    right: 7%;
+    bottom: 0;
+    left: 7%;
+    height: 20%;
+    border-top: 1px solid rgb(240 208 155 / 23%);
+    content: '';
+    opacity: 0.6;
+    background:
+        repeating-linear-gradient(90deg, transparent 0 93px, rgb(201 151 85 / 13%) 95px, transparent 97px),
+        linear-gradient(180deg, rgb(126 48 42 / 18%), transparent 85%);
+    transform: perspective(140px) rotateX(12deg);
+    transform-origin: bottom;
+}
+
+.theatre-marquee__content {
+    position: relative;
+    z-index: 2;
+    max-width: 980px;
+    padding-block: 0.25rem;
+}
+
+.theatre-kicker {
+    color: var(--brass-light);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+}
+
+.theatre-marquee__title,
+.theatre-auth-title {
+    margin-top: 1rem;
+    color: #fff0d7;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: clamp(2.7rem, 6.3vw, 5rem);
+    font-weight: 700;
+    letter-spacing: -0.045em;
+    line-height: 0.98;
+    text-shadow: 0 5px 30px rgb(0 0 0 / 65%);
+}
+
+.theatre-marquee__title em {
+    color: var(--brass-light);
+    font-weight: 400;
+}
+
+.theatre-marquee__title {
+    font-size: clamp(2.5rem, 5vw, 4.25rem);
+}
+
+.theatre-marquee__description {
+    max-width: 560px;
+    margin-top: 1.25rem;
+    color: #e0cfc0;
+    font-size: 1rem;
+    line-height: 1.8;
+}
+
+.theatre-marquee__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-top: 1.7rem;
+}
+
+.theatre-marquee__ticket {
+    position: absolute;
+    z-index: 2;
+    top: 1.35rem;
+    right: 1.4rem;
+    border: 1px solid rgb(240 208 155 / 56%);
+    border-radius: 0.2rem;
+    padding: 0.5rem 0.7rem;
+    color: var(--brass-light);
+    background: rgb(13 7 9 / 68%);
+    font-size: 0.62rem;
+    letter-spacing: 0.16em;
+    text-align: center;
+    text-transform: uppercase;
+    transform: rotate(2deg);
+}
+
+.theatre-marquee__ticket strong {
+    display: block;
+    margin-top: 0.25rem;
+    color: #fff0d7;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 0.86rem;
+    letter-spacing: 0.08em;
+}
+
+.theatre-content-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 300px;
+    align-items: start;
+    gap: 2rem;
+    margin-top: 2.7rem;
+}
+
+.theatre-section-heading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.theatre-section-title,
+.theatre-panel__title {
+    color: #f4dfc1;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-weight: 700;
+}
+
+.theatre-section-title {
+    font-size: 1.45rem;
+}
+
+.theatre-section-subtitle,
+.theatre-muted {
+    color: var(--muted);
+    font-size: 0.84rem;
+    line-height: 1.65;
+}
+
+.theatre-count {
+    color: #c29d75;
+    font-size: 0.76rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.theatre-feed-list,
+.theatre-sidebar {
+    display: grid;
+    gap: 1rem;
+}
+
+.theatre-panel,
+.theatre-thread-card,
+.theatre-empty-state {
+    border: 1px solid rgb(201 151 85 / 28%);
+    border-radius: 0.45rem;
+    background: linear-gradient(135deg, rgb(35 16 21 / 96%), rgb(17 10 13 / 97%));
+    box-shadow: 0 12px 30px rgb(0 0 0 / 28%), inset 0 1px rgb(255 240 215 / 3%);
+}
+
+.theatre-panel {
+    padding: 1.2rem;
+}
+
+.theatre-panel__title {
+    border-bottom: 1px solid rgb(201 151 85 / 31%);
+    padding-bottom: 0.7rem;
+    font-size: 1.05rem;
+}
+
+.theatre-category-row {
+    margin-top: 0.9rem;
+    border-top: 1px solid rgb(201 151 85 / 12%);
+    padding-top: 0.8rem;
+}
+
+.theatre-category-row:first-of-type {
+    border-top: 0;
+}
+
+.theatre-category-row__name {
+    color: var(--ivory);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.theatre-category-row__count {
+    color: #bd9566;
+    font-size: 0.72rem;
+}
+
+.theatre-topic-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.9rem;
+}
+
+.theatre-chip {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid rgb(201 151 85 / 32%);
+    border-radius: 999px;
+    padding: 0.3rem 0.65rem;
+    color: #e7c99d;
+    background: rgb(78 23 32 / 50%);
+    font-size: 0.72rem;
+}
+
+.theatre-note {
+    border-color: rgb(172 52 69 / 48%);
+    background: linear-gradient(135deg, rgb(74 17 31 / 84%), rgb(25 10 15 / 98%));
+}
+
+.theatre-note .theatre-panel__title {
+    color: var(--brass-light);
+}
+
+.theatre-empty-state {
+    padding: 3rem 1.5rem;
+    text-align: center;
+    background:
+        radial-gradient(ellipse at 50% 0%, rgb(120 27 45 / 20%), transparent 68%),
+        linear-gradient(135deg, rgb(29 13 18 / 98%), rgb(13 9 11 / 98%));
+}
+
+.theatre-empty-state__title {
+    color: #f5e5cc;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+
+.theatre-empty-state__copy {
+    margin: 0.65rem auto 1.2rem;
+    color: var(--muted);
+    font-size: 0.88rem;
+}
+
+.theatre-thread-card {
+    padding: 1.15rem;
+    transition: border-color 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+}
+
+.theatre-thread-card:hover {
+    transform: translateY(-2px);
+    border-color: rgb(201 151 85 / 55%);
+    box-shadow: 0 16px 34px rgb(0 0 0 / 38%), 0 0 18px rgb(132 38 55 / 12%);
+}
+
+.theatre-vote-rail {
+    display: flex;
+    width: 44px;
+    flex: 0 0 44px;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.28rem;
+    border: 1px solid rgb(201 151 85 / 19%);
+    border-radius: 0.25rem;
+    padding: 0.38rem 0.15rem;
+    background: rgb(8 6 8 / 42%);
+}
+
+.theatre-vote-button {
+    border: 0;
+    border-radius: 0.2rem;
+    padding: 0.15rem 0.35rem;
+    color: #a78c7e;
+    background: transparent;
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1;
+}
+
+.theatre-vote-button:hover,
+.theatre-vote-button--up:hover {
+    color: var(--brass-light);
+}
+
+.theatre-vote-button--down:hover {
+    color: #e28b8e;
+}
+
+.theatre-vote-score {
+    color: #f0d5ac;
+    font-size: 0.78rem;
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+}
+
+.theatre-thread-content {
+    min-width: 0;
+    flex: 1;
+}
+
+.theatre-thread-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem 0.65rem;
+    color: #bba69c;
+    font-size: 0.72rem;
+}
+
+.theatre-thread-heading {
+    margin-top: 0.8rem;
+    color: #f4e4cf;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 1.22rem;
+    font-weight: 700;
+    line-height: 1.35;
+}
+
+.theatre-thread-heading a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.theatre-thread-heading a:hover {
+    color: var(--brass-light);
+}
+
+.theatre-thread-copy {
+    margin-top: 0.6rem;
+    color: #c9b9ac;
+    font-size: 0.86rem;
+    line-height: 1.7;
+    white-space: pre-line;
+}
+
+.theatre-thread-footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem 1.1rem;
+    margin-top: 1rem;
+    color: #b89b7d;
+    font-size: 0.72rem;
+    font-weight: 600;
+}
+
+.theatre-thread-footer a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.theatre-thread-footer a:hover {
+    color: var(--brass-light);
+}
+
+.theatre-deleted {
+    color: #aa9993;
+}
+
+.theatre-auth-card {
+    display: grid;
+    width: min(100%, 960px);
+    grid-template-columns: minmax(240px, 0.78fr) minmax(0, 1fr);
+    margin: 1rem auto;
+    overflow: hidden;
+    border: 1px solid rgb(201 151 85 / 48%);
+    border-radius: 0.55rem;
+    background: #140c0f;
+    box-shadow: 0 24px 65px rgb(0 0 0 / 52%), inset 0 0 0 4px rgb(201 151 85 / 7%);
+}
+
+.theatre-auth-intro {
+    position: relative;
+    display: flex;
+    min-height: 100%;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+    border-right: 1px solid rgb(201 151 85 / 32%);
+    padding: clamp(1.7rem, 4vw, 3rem);
+    background:
+        radial-gradient(ellipse at 50% 5%, rgb(241 192 142 / 21%), transparent 40%),
+        linear-gradient(160deg, #741d31, #300d18 62%, #14090d);
+}
+
+.theatre-auth-intro::after {
+    position: absolute;
+    right: -20%;
+    bottom: -26%;
+    left: -20%;
+    height: 48%;
+    border-top: 1px solid rgb(240 208 155 / 32%);
+    content: '';
+    background: repeating-linear-gradient(90deg, transparent 0 60px, rgb(201 151 85 / 12%) 61px, transparent 63px);
+    transform: perspective(180px) rotateX(17deg);
+    transform-origin: top;
+}
+
+.theatre-auth-intro > * {
+    position: relative;
+    z-index: 1;
+}
+
+.theatre-auth-title {
+    margin-top: 0.8rem;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    line-height: 1.05;
+}
+
+.theatre-auth-description {
+    margin-top: 0.8rem;
+    color: #e1c9b6;
+    font-size: 0.88rem;
+    line-height: 1.7;
+}
+
+.theatre-admit-ticket {
+    display: inline-flex;
+    width: fit-content;
+    flex-direction: column;
+    margin-top: 2rem;
+    border: 1px dashed rgb(240 208 155 / 68%);
+    padding: 0.7rem 0.85rem;
+    color: var(--brass-light);
+    background: rgb(20 7 12 / 35%);
+    font-size: 0.62rem;
+    letter-spacing: 0.17em;
+    text-transform: uppercase;
+}
+
+.theatre-admit-ticket strong {
+    margin-top: 0.25rem;
+    color: #fff0d7;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 0.95rem;
+    letter-spacing: 0.08em;
+}
+
+.theatre-auth-form-panel {
+    padding: clamp(1.5rem, 4vw, 3rem);
+}
+
+.theatre-form {
+    display: grid;
+    gap: 1.15rem;
+    margin-top: 1.5rem;
+}
+
+.theatre-form-field label {
+    display: block;
+    color: #e2d0bf;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+}
+
+.theatre-input {
+    display: block;
+    width: 100%;
+    margin-top: 0.45rem;
+    border: 1px solid rgb(201 151 85 / 34%);
+    border-radius: 0.3rem;
+    padding: 0.72rem 0.8rem;
+    color: var(--ivory);
+    background: #0b080a;
+    outline: none;
+    transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.theatre-input:focus {
+    border-color: var(--brass-light);
+    box-shadow: 0 0 0 3px rgb(201 151 85 / 15%);
+}
+
+.theatre-input::placeholder {
+    color: #8d7770;
+}
+
+.theatre-form-error {
+    margin-top: 0.4rem;
+    color: #f1a5a3;
+    font-size: 0.78rem;
+}
+
+.theatre-auth-switch {
+    margin-top: 1.5rem;
+    color: #bdaba1;
+    font-size: 0.82rem;
+}
+
+.theatre-auth-switch a {
+    color: var(--brass-light);
+    text-underline-offset: 3px;
+}
+
+.theatre-main nav[role='navigation'] a,
+.theatre-main nav[role='navigation'] span[aria-current='page'] span {
+    border-color: rgb(201 151 85 / 28%);
+    color: #e7d5bd;
+    background: #1b1014;
+}
+
+.theatre-main nav[role='navigation'] span[aria-current='page'] span {
+    color: #20110d;
+    background: var(--brass-light);
+}
+
+a:focus-visible,
+button:focus-visible {
+    outline: 2px solid var(--brass-light);
+    outline-offset: 3px;
+}
+
+@media (max-width: 800px) {
+    .theatre-header__inner,
+    .theatre-footer__inner,
+    .theatre-main {
+        width: min(100% - 2rem, 1380px);
+    }
+
+    .theatre-content-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .theatre-sidebar {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .theatre-note {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 620px) {
+    .theatre-header__inner {
+        align-items: flex-start;
+    }
+
+    .theatre-navigation {
+        width: 100%;
+        justify-content: flex-start;
+        gap: 0.4rem 0.85rem;
+    }
+
+    .theatre-marquee {
+        min-height: 410px;
+        align-items: end;
+        padding: 1.4rem;
+    }
+
+    .theatre-marquee__ticket {
+        top: 1rem;
+        right: 1rem;
+    }
+
+    .theatre-marquee__title {
+        font-size: clamp(2.65rem, 13vw, 4rem);
+    }
+
+    .theatre-sidebar {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .theatre-note {
+        grid-column: auto;
+    }
+
+    .theatre-auth-card {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .theatre-auth-intro {
+        min-height: 210px;
+        border-right: 0;
+        border-bottom: 1px solid rgb(201 151 85 / 32%);
+    }
+
+    .theatre-admit-ticket {
+        margin-top: 1.1rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+    }
+}
